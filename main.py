@@ -26,6 +26,25 @@ def password_generator():
     password_entry.insert(0, password)
     pyperclip.copy(password)
 
+# --------------------- Search JSON Data ----------------------#
+def search_exising_passwords():
+    search_website = website_entry.get()
+
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No Data File Found")
+    else:
+        if search_website in data:
+            search_email = data[search_website]['email']
+            search_password = data[search_website]['password']
+            messagebox.showinfo(title=f"{search_website}", message=f"Email: {search_email} \nPassword: "
+                                                               f"{search_password}")
+        else:
+            messagebox.showinfo(title="Error", message=f"No details for {search_website} exists.")
+
+
 
 # --------------------- Save Password -------------------------#
 
@@ -94,8 +113,8 @@ password_label = tk.Label(text="Password:", font=("Arial", 16), fg=WHITE, bg=GRA
 password_label.grid(column=0, row=3)
 
 # Creating input boxes
-website_entry = tk.Entry(window, width=61)
-website_entry.grid(column=1, row=1, columnspan=2)
+website_entry = tk.Entry(window, width=33)
+website_entry.grid(column=1, row=1)
 website_entry.focus()
 
 email_entry = tk.Entry(window, width=61)
@@ -111,5 +130,8 @@ generate_pass_button.grid(column=2, row=3, columnspan=1)
 
 add_button = tk.Button(text="Add", width=52, command=add_password)
 add_button.grid(column=1, row=4, columnspan=2)
+
+search_button = tk.Button(text="Search", width=22, command=search_exising_passwords)
+search_button.grid(column=2, row=1, columnspan=1)
 
 window.mainloop()
